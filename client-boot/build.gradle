@@ -1,0 +1,42 @@
+plugins {
+	id "org.springframework.boot" version "${springbootVersion}"
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+dependencies {
+	compile project(":client-common")
+	compile project(":client-data")
+	compile project(":client-redis")
+	runtimeOnly "org.springframework.boot:spring-boot-devtools"
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	implementation "org.springframework.boot:spring-boot-starter-websocket"
+
+	//eureka
+	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+
+	compile "io.springfox:springfox-swagger2:${swaggerVersion}"
+	compile "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+	compile "io.projectreactor.netty:reactor-netty:0.8.10.RELEASE"
+
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+//sonar扫描的路径
+sonarqube {
+    properties {
+        property "sonar.sources", "src/main/java"
+        property "sonar.exclusions", "**/*Application.java"
+    }
+}
+

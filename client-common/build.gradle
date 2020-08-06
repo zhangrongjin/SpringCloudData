@@ -1,0 +1,15 @@
+dependencies {
+    compile "org.apache.httpcomponents:httpclient:4.5.10"
+    compile "org.apache.httpcomponents:httpcore:4.4.12"
+    compile "org.apache.httpcomponents:httpasyncclient:4.1.4"
+    compile "org.apache.httpcomponents:httpcore-nio:4.4.12"
+}
+
+//sonar扫描的路径
+sonarqube {
+    properties {
+        property "sonar.sources", "src/main/java"
+        property "sonar.exclusions", "**/*Application.java"
+    }
+}
+

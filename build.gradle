@@ -1,0 +1,90 @@
+group = 'net.work.springcloud.data'
+version = "${projectVersion}"
+
+buildscript {
+  repositories {
+    maven {url "https://plugins.gradle.org/m2/"}
+    maven {url "https://mvnrepository.com/artifact/"}
+  }
+  dependencies {
+    classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1")
+  }
+}
+
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+    }
+}
+
+subprojects {
+    // 设置编译器使用的编码
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    group 'network.spring.cloud.data'
+    version "${projectVersion}"
+    sourceCompatibility = '1.8'
+
+    repositories {
+        maven {url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        maven {url "http://192.168.9.39:8081/repository/maven-public/"}
+        mavenCentral()
+    }
+
+    dependencies {
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompile "junit:junit:$junitVersion"
+        testCompile "org.projectlombok:lombok:${lombokVersion}"
+        testCompile "org.powermock:powermock-module-junit4:${mockVersion}"
+        testCompile "org.powermock:powermock-api-easymock:${mockVersion}"
+        testCompile "org.powermock:powermock-api-mockito2:${mockVersion}"
+        testCompile "org.powermock:powermock-core:${mockVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        compile "com.alibaba:fastjson:$fastJsonVersion"
+        compile "org.apache.commons:commons-lang3:$commonLang3Version"
+        compile "org.projectlombok:lombok:${lombokVersion}"
+        compile "commons-io:commons-io:$commonIoVersion"
+    }
+
+	//sonar扫描的路径
+    sonarqube {
+        properties {
+            property "sonar.sources", "src/main/java"
+        }
+    }
+
+    //jacoco测试报表的功能
+    jacocoTestReport {
+	    reports {
+	        xml.enabled true
+	        html.enabled true
+	    }
+	}
+
+	jacocoTestCoverageVerification {
+		violationRules {
+			rule {
+				limit {
+					minimum = 0.7
+				}
+			}
+		}
+	 }
+
+	check.dependsOn jacocoTestReport
+
+	test {
+	 //   include '**/Test*.class'
+	// 忽略指定的测试用例
+	}
+}
+
+
