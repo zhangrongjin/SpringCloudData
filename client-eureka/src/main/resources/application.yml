@@ -1,6 +1,11 @@
 server:
   port: 8761
 eureka:
+  server:
+    # 默认是true，调整为false，关闭eureka的自我保护
+    enable-self-preservation: true
+    # 每隔 4 秒清理服务列表 （默认值 60*1000 是1分钟）
+    eviction-interval-timer-in-ms: 4000
   instance:
     hostname: localhost
   client:

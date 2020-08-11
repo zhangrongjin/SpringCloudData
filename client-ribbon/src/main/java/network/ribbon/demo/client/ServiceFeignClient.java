@@ -1,0 +1,40 @@
+package network.ribbon.demo.client;
+
+import network.ribbon.demo.req.RegisterReq;
+import network.ribbon.demo.resp.BaseResp;
+import network.ribbon.demo.resp.RegisterResp;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * @program: SpringCloudData
+ * @description:
+ * 1. FeignClient必须是一个接口interface
+ * 2. 必须加上@FeignClient指定需要调用哪个服务的接口
+ * 3. Feign默认集成了Ribbon，所以通过Feign也可以实现服务的负载均衡调用(轮询方式)。
+ *
+ * Feign的实现的过程大致如下：
+ * a. 首先通过@EnableFeignClients注解开启FeignClient
+ * b. 根据Feign的规则实现接口，并加@FeignClient注解
+ * c. 程序启动后，会进行包扫描，扫描所有的@ FeignClient的注解的类，并将这些信息注入到ioc容器中。
+ * d. 当接口的方法被调用，通过jdk的代理，来生成具体的RequestTemplate
+ * e. RequestTemplate在生成Request
+ * f. Request交给Client去处理，其中Client可以是HttpUrlConnection、HttpClient也可以是Okhttp
+ * g. 最后Client被封装到LoadBalanceClient类，这个类结合类Ribbon做到了负载均衡
+ *
+ *@FeignClient注解通过value指定调用的服务名称，对应application.yml的application-name
+ * 通过fallback指定远程服务调用失败的回调方法，也叫服务降级处理,回调类必须实现使用@FeignClient标识的接口（implements ServiceBFeignClient）
+ * @author: Rongjin Zhang
+ * @create: 2020-08-06 14:40
+ */
+
+@Component
+@FeignClient(value = "boot-api", fallback=ServiceFallback.class) //这里的value对应调用服务的spring.applicatoin.name
+public interface ServiceFeignClient {
+
+    @RequestMapping(value = "/boot/user/register")
+    BaseResp<RegisterResp> register(@RequestBody RegisterReq req);
+
+}

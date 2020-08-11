@@ -58,7 +58,7 @@ logging:
     network.spring.boot.demo: debug
 eureka:
   instance:
-    instance-id: localhost
+    instance-id: bootserver
     hostname: localhost
   client:
     service-url:

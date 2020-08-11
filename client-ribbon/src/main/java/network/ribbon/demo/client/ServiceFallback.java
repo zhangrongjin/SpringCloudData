@@ -1,0 +1,20 @@
+package network.ribbon.demo.client;
+
+import network.ribbon.demo.req.RegisterReq;
+import network.ribbon.demo.resp.BaseResp;
+import network.ribbon.demo.resp.RegisterResp;
+import org.springframework.stereotype.Component;
+
+/**
+ * @program: SpringCloudData
+ * @description: 用于熔断发生时的处理。
+ * @author: Rongjin Zhang
+ * @create: 2020-08-06 15:16
+ */
+@Component
+public class ServiceFallback implements ServiceFeignClient{
+    @Override
+    public BaseResp<RegisterResp> register(RegisterReq req) {
+        return BaseResp.build(10001,"");
+    }
+}
