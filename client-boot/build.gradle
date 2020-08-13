@@ -17,8 +17,9 @@ dependencies {
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	implementation "org.springframework.boot:spring-boot-starter-websocket"
 
-	//eureka
-	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+	//nacos
+	implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:${nacosVersion}"
+	implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config:${nacosVersion}"
 
 	//redislimit
 	implementation "top.crossoverjie.opensource:distributed-redis-tool:1.0.5"

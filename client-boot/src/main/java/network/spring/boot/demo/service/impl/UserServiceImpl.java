@@ -10,6 +10,8 @@ import network.spring.boot.demo.service.UserService;
 import network.data.dao.mapper.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Value("${config.ret}")
+    private int id;
+
     @Override
     public BaseResp<RegisterResp> register(RegisterReq req) {
         User user = new User();
@@ -32,6 +37,8 @@ public class UserServiceImpl implements UserService {
         if(ret < 1){
             return BaseResp.build(RetEnum.RET_FAIL);
         }
-        return BaseResp.buildSuccess();
+        RegisterResp registerResp = new RegisterResp();
+        registerResp.setId(id);
+        return BaseResp.buildSuccess(registerResp);
     }
 }
